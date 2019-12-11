@@ -10,6 +10,7 @@ in
   
   services.server = { pkgs, ... }: {
     nixos.useSystemd = true;
+    nixos.runWrappersUnsafe = true;
     nixos.configuration = {
       networking.firewall.enable = false; # TODO to refine
       
@@ -17,14 +18,13 @@ in
       
       imports = lib.attrValues pkgs.nur.repos.kapack.modules;
       boot.tmpOnTmpfs = true;
-      
+
       #environment.systemPackages = with pkgs; [ nur.repos.kapack.oar ];
       environment.systemPackages = with pkgs; [ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps; [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
       services.oar.server.enable = true;
       services.oar.dbserver.enable = true;
 
       services.oar.web.enable = true;
-
       
       #Set oar user's keys
       environment.etc."privkey.snakeoil" = { mode = "0600"; source = snakeOilPrivateKey; };
@@ -50,6 +50,7 @@ in
     service.ports = [
       "8000:80" # host:container
     ];
+    
   };
 
   services.node1 = { pkgs, ... }: {
@@ -57,6 +58,7 @@ in
     service.hostname="node1";
     service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
     nixos.useSystemd = true;
+    nixos.runWrappersUnsafe = true;
     nixos.configuration = {
       networking.firewall.enable = false;
       imports = lib.attrValues pkgs.nur.repos.kapack.modules;
