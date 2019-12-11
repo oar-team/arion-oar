@@ -13,14 +13,19 @@ in
     nixos.configuration = {
       networking.firewall.enable = false; # TODO to refine
       
-      imports = lib.attrValues pkgs.nur.repos.augu5te.modules;
+      environment.etc."oarapi-users" = { mode = "0644"; text = "auguste:$apr1$EWduaWzM$ZsqQ7ZL9NUh4rHpkj3D5B/"; };
+      
+      imports = lib.attrValues pkgs.nur.repos.kapack.modules;
       boot.tmpOnTmpfs = true;
       
-      #environment.systemPackages = with pkgs; [ nur.repos.augu5te.oar ];
-      environment.systemPackages = with pkgs; [ telnet pkgs.nur.repos.augu5te.oar (python37.withPackages(ps: with ps; [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.augu5te.oar])) ];
+      #environment.systemPackages = with pkgs; [ nur.repos.kapack.oar ];
+      environment.systemPackages = with pkgs; [ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps; [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
       services.oar.server.enable = true;
       services.oar.dbserver.enable = true;
 
+      services.oar.web.enable = true;
+
+      
       #Set oar user's keys
       environment.etc."privkey.snakeoil" = { mode = "0600"; source = snakeOilPrivateKey; };
       environment.etc."pubkey.snakeoil" = { mode = "0600"; source = snakeOilPublicKey; };
@@ -42,6 +47,9 @@ in
     service.useHostStore = true;
     service.hostname="server";
     service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
+    service.ports = [
+      "8000:80" # host:container
+    ];
   };
 
   services.node1 = { pkgs, ... }: {
@@ -51,7 +59,7 @@ in
     nixos.useSystemd = true;
     nixos.configuration = {
       networking.firewall.enable = false;
-      imports = lib.attrValues pkgs.nur.repos.augu5te.modules;
+      imports = lib.attrValues pkgs.nur.repos.kapack.modules;
       boot.tmpOnTmpfs = true;
       services.oar.node.enable = true;
       services.openssh.enable = true;
@@ -61,8 +69,6 @@ in
       environment.etc."pubkey.snakeoil" = { mode = "0600"; source = snakeOilPublicKey; };
       services.oar.privateKeyFile = "/etc/privkey.snakeoil";
       services.oar.publicKeyFile = "/etc/pubkey.snakeoil";
-
-
       
       users.users.root.openssh.authorizedKeys.keys = ["ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBChdA2BmwcG49OrQN33f/sj+OHL5sJhwVl2Qim0vkUJQCry1zFpKTa9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ= sakeoil"];
 
