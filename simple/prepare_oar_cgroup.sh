@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/run/current-system/sw/bin/bash
 # This script prepopulates OAR cgroup directory hierarchy, as used in the
 # job_resource_manager_cgroups.pl script, in order to have nodes use different
 # subdirectories and avoid conflitcs due to having all nodes actually running on

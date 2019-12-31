@@ -4,7 +4,10 @@ let
 inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
 common = {
+  
   service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
+  service.useHostStore = true;
+  
   nixos.useSystemd = true;
   nixos.runWrappersUnsafe = true;
   nixos.configuration = {
@@ -42,7 +45,7 @@ in
     nixos.configuration = {
       environment.etc."oarapi-users" = {
         mode = "0644";
-        text = "user1:$apr1$EWduaWzM$ZsqQ7ZL9NUh4rHpkj3D5B/";
+        text = "user1:$apr1$yWaXLHPA$CeVYWXBqpPdN78e5FvbY3/";
       };
 
       environment.systemPackages = with pkgs;
@@ -52,7 +55,6 @@ in
       services.oar.server.enable = true;
       services.oar.dbserver.enable = true;
       services.oar.web.enable = true;
-      #services.openssh.enable = true;
     };
     
     service.ports = [
@@ -64,7 +66,27 @@ in
   services.node1 = addCommon {
     service.hostname="node1";
     nixos.configuration = {
-      services.oar.node.enable = true;
+      services.oar.node = {
+        enable = true;
+        register = {
+          enable = true;
+          extraCommand = "/srv/prepare_oar_cgroup.sh init";
+        };
+      };
+      #services.openssh.enable = true;
+    };
+  };
+  
+  services.node2 = addCommon {
+    service.hostname="node2";
+    nixos.configuration = {
+      services.oar.node = {
+        enable = true;
+        register = {
+          enable = true;
+          extraCommand = "/srv/prepare_oar_cgroup.sh init";
+        };
+      };
       #services.openssh.enable = true;
     };
   };
