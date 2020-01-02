@@ -15,7 +15,8 @@ common = {
     boot.tmpOnTmpfs = true;
 
     users.users.user1 = {isNormalUser = true;};
-
+    users.users.user2 = {isNormalUser = true;};
+    
     #environment.systemPackages = with pkgs; [ nur.repos.kapack.oar ];
     #environment.systemPackages = with pkgs;
     #[ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
@@ -45,7 +46,10 @@ in
     nixos.configuration = {
       environment.etc."oarapi-users" = {
         mode = "0644";
-        text = "user1:$apr1$yWaXLHPA$CeVYWXBqpPdN78e5FvbY3/";
+        text = ''
+          user1:$apr1$yWaXLHPA$CeVYWXBqpPdN78e5FvbY3/
+          user2:$apr1$qMikYseG$VL8nyeSSmxXNe3YDOiCwr1
+        '';
       };
 
       environment.systemPackages = with pkgs;
