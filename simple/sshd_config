@@ -26,6 +26,6 @@ UseDNS no
 
 AcceptEnv OAR_CPUSET OAR_JOB_USER
 PermitUserEnvironment yes
-UseLogin no
+
 AllowUsers oar
 XAuthLocation /usr/bin/xauth
