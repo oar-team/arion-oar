@@ -18,14 +18,16 @@ common = {
     users.users.user2 = {isNormalUser = true;};
     
     #environment.systemPackages = with pkgs; [ nur.repos.kapack.oar ];
-    #environment.systemPackages = with pkgs;
-    #[ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
-    #  [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
+    environment.systemPackages = with pkgs;
+    [ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
+      [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
 
     # oar common stuffs
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
-   
-    #Set oar user's keys
+
+    # oar db passwords
+    services.oar.database.passwordFile = "/srv/oar-dbpassword";
+    # Set oar user's keys
     environment.etc."privkey.snakeoil" = { mode = "0600"; source = snakeOilPrivateKey; };
     environment.etc."pubkey.snakeoil" = { mode = "0600"; source = snakeOilPublicKey; };
     services.oar.privateKeyFile = "/etc/privkey.snakeoil";
@@ -39,7 +41,7 @@ addCommon = x: lib.recursiveUpdate x common;
 in
 
 {
-  
+
   services.server = addCommon {
     service.hostname="server";
 
@@ -52,10 +54,7 @@ in
         '';
       };
 
-      environment.systemPackages = with pkgs;
-      [ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
-        [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
-      
+      # All in one container but oar-node
       services.oar.server.enable = true;
       services.oar.dbserver.enable = true;
       services.oar.web.enable = true;
