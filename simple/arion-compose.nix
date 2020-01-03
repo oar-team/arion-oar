@@ -52,6 +52,13 @@ in
 
 {
 
+  services.frontend = addCommon {
+    service.hostname="frontend";
+    nixos.configuration = {
+      services.oar.client.enable = true;
+    };    
+  };
+
   services.server = addCommon {
     service.hostname="server";
 
