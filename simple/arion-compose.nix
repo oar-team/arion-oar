@@ -24,14 +24,24 @@ common = {
 
     # oar common stuffs
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
-
-    # oar db passwords
-    services.oar.database.passwordFile = "/srv/oar-dbpassword";
-    # Set oar user's keys
+    
+    # oar user's key files
     environment.etc."privkey.snakeoil" = { mode = "0600"; source = snakeOilPrivateKey; };
     environment.etc."pubkey.snakeoil" = { mode = "0600"; source = snakeOilPublicKey; };
-    services.oar.privateKeyFile = "/etc/privkey.snakeoil";
-    services.oar.publicKeyFile = "/etc/pubkey.snakeoil";
+
+    services.oar = {
+      # oar db passwords
+      database = {
+        host = "server";
+        passwordFile = "/srv/oar-dbpassword";
+      };
+      server.host = "server";
+      privateKeyFile = "/etc/privkey.snakeoil";
+      publicKeyFile = "/etc/pubkey.snakeoil";
+      extraConfig = {
+        LOG_LEVEL="3";
+      };
+    };  
   };
  
 };
