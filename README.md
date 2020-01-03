@@ -10,7 +10,7 @@ Arion OAR allows to setup mini OAR cluster based on docker containers and [NixOS
 nix-env -iA arion -f https://github.com/oar-team/arion/tarball/master
 ```
 # Basic flavor:
-Simple OAR cluter with a frontend, a server and two nodes.
+Basic OAR cluster with a frontend, a server and two nodes.
 
 ```sh
 git clone git@github.com:oar-team/arion-oar.git
@@ -21,6 +21,10 @@ cd arion-oar/basic
 arion exec frontend bash
 #Now submit an interactive job (Ctrl-D to terminate)
 oarsub -I
+```
+To stop containers
+```sh
+arion down
 ```
 
 # Miscs:
