@@ -12,6 +12,7 @@ common = {
     networking.firewall.enable = false;
     boot.tmpOnTmpfs = true;
     
+    environment.systemPackages = with pkgs; [ ruby ];
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
 
     services.cigri = {
@@ -19,8 +20,11 @@ common = {
         host = "cigri";
         passwordFile = "/srv/cigri-dbpassword";
       };
-      server.host = "cigri";
-    };  
+      server = {
+        host = "cigri";
+        logfile = "/tmp/cigri.log";
+      };
+    };
   };
  
 };
@@ -33,9 +37,9 @@ in
   services.cigri = addCommon {
     service.hostname="cigri";
     nixos.configuration = {
+      services.cigri.dbserver.enable = true;
       services.cigri.client.enable = true;
       services.cigri.server.enable = true;
-      services.cigri.dbserver.enable = true;
     };
   };
 }
