@@ -40,6 +40,16 @@ in
       services.cigri.dbserver.enable = true;
       services.cigri.client.enable = true;
       services.cigri.server.enable = true;
+
+      services.nginx = {
+        enable = true;
+        recommendedProxySettings = true;
+        virtualHosts = {
+          localhost = {
+            locations."/".proxyPass = "http://unix:/run/cigri/cigri-rest-api.socket";
+          };
+        };
+      };
     };
   };
 }
