@@ -11,8 +11,11 @@ common = {
   nixos.configuration = {
     networking.firewall.enable = false;
     boot.tmpOnTmpfs = true;
+
+    users.users.user1 = {isNormalUser = true;};
+    users.users.user2 = {isNormalUser = true;};
     
-    environment.systemPackages = with pkgs; [ ruby ];
+    environment.systemPackages = with pkgs; [ telnet ruby ];
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
 
     services.cigri = {
@@ -40,16 +43,7 @@ in
       services.cigri.dbserver.enable = true;
       services.cigri.client.enable = true;
       services.cigri.server.enable = true;
-
-      services.nginx = {
-        enable = true;
-        recommendedProxySettings = true;
-        virtualHosts = {
-          localhost = {
-            locations."/".proxyPass = "http://unix:/run/cigri/cigri-rest-api.socket";
-          };
-        };
-      };
+      services.cigri.server.web.enable = true;
     };
   };
 }
