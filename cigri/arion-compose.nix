@@ -17,7 +17,7 @@ common = {
     users.users.user1 = {isNormalUser = true;};
     users.users.user2 = {isNormalUser = true;};
     
-    environment.systemPackages = with pkgs; [ telnet ruby ];
+    environment.systemPackages = with pkgs; [ socat wget ruby ];
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
     
     # oar user's key files
@@ -74,8 +74,32 @@ in
   services.server = addCommon {
     service.hostname="server";
     nixos.configuration = {
-      services.oar.server.enable = true;
+      environment.etc."oarapi-users" = {
+        mode = "0644";
+        text = ''
+          user1:$apr1$yWaXLHPA$CeVYWXBqpPdN78e5FvbY3/
+          user2:$apr1$qMikYseG$VL8nyeSSmxXNe3YDOiCwr1
+        '';
+      };
       services.oar.dbserver.enable = true;
+      services.oar.server = {
+        enable = true;
+      };
+      
+      services.oar.web = {
+        enable = true;
+        extraConfig = ''
+          location ^~ /oarapi-unsecure/ {
+          
+          rewrite ^/oarapi-unsecure/?(.*)$ /$1 break;
+
+          include ${pkgs.nginx}/conf/uwsgi_params;
+          
+          uwsgi_pass unix:/run/uwsgi/oarapi.sock;
+          uwsgi_param HTTP_X_REMOTE_IDENT $remote_user;
+          }
+        '';
+      };
     };
   };
   
