@@ -1,0 +1,33 @@
+{
+  "name": "test1",
+  "resources": "resource_id=1",
+  "exec_file": "/srv/test_jobs/test1.sh",
+  "test_mode": "false",
+  "clusters": {
+    "cluster_0": {
+      "type": "best-effort",
+      "walltime": "300"
+    }
+  },
+  "prologue": [
+    "mkdir $HOME/workdir",
+    "cd $HOME/workdir",
+    "touch prologue_works"
+  ],
+  "epilogue": [
+    "cd $HOME/workdir",
+    "touch epilogue_works"
+  ],
+  "params": [ 
+    "param1 1", 
+    "param2 2", 
+    "param3 3", 
+    "param4 4",
+    "param5 5",
+    "param6 6",
+    "param7 7",
+    "param8 8",
+    "param9 9",
+    "param10 10"
+  ]
+}
