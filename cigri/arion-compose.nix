@@ -41,6 +41,9 @@ common = {
 
 addCommon = x: lib.recursiveUpdate x common;
 
+ apacheHttpdWithIdent = pkgs.apacheHttpd.overrideAttrs (oldAttrs: rec {
+  configureFlags = oldAttrs.configureFlags ++ [ "--enable-ident" ]; });
+
 in
 
 {  
@@ -60,7 +63,7 @@ in
           host = "cigri";
           logfile = "/tmp/cigri.log";
         };        
-      };
+      };      
     }; 
   };
 
@@ -116,16 +119,16 @@ in
     };
   };
   
-  services.node2 = addCommon {
-    service.hostname="node2";
-    nixos.configuration = {
-      services.oar.node = {
-        enable = true;
-        register = {
-          enable = true;
-          extraCommand = "/srv/prepare_oar_cgroup.sh init";
-        };
-      };
-    };
-  };
+  # services.node2 = addCommon {
+  #   service.hostname="node2";
+  #   nixos.configuration = {
+  #     services.oar.node = {
+  #       enable = true;
+  #       register = {
+  #         enable = true;
+  #         extraCommand = "/srv/prepare_oar_cgroup.sh init";
+  #       };
+  #     };
+  #   };
+  # };
 }
