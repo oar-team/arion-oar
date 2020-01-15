@@ -19,7 +19,7 @@ common = {
     
     #environment.systemPackages = with pkgs; [ nur.repos.kapack.oar ];
     environment.systemPackages = with pkgs;
-    [ telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
+    [ curl telnet pkgs.nur.repos.kapack.oar (python37.withPackages(ps: with ps;
       [ pip psycopg2 clustershell pyzmq click pyinotify sortedcontainers pkgs.nur.repos.kapack.oar])) ];
 
     # oar common stuffs
