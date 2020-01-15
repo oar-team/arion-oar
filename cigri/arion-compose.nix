@@ -92,14 +92,12 @@ in
       services.oar.web = {
         enable = true;
         extraConfig = ''
+          #To support remote_ident custom header
+          underscores_in_headers on;
           location ^~ /oarapi-unsecure/ {
-          
-          rewrite ^/oarapi-unsecure/?(.*)$ /$1 break;
-
-          include ${pkgs.nginx}/conf/uwsgi_params;
-          
-          uwsgi_pass unix:/run/uwsgi/oarapi.sock;
-          uwsgi_param HTTP_X_REMOTE_IDENT $remote_user;
+            rewrite ^/oarapi-unsecure/?(.*)$ /$1 break;
+            include ${pkgs.nginx}/conf/uwsgi_params;
+            uwsgi_pass unix:/run/uwsgi/oarapi.sock;
           }
         '';
       };
@@ -119,16 +117,16 @@ in
     };
   };
   
-  # services.node2 = addCommon {
-  #   service.hostname="node2";
-  #   nixos.configuration = {
-  #     services.oar.node = {
-  #       enable = true;
-  #       register = {
-  #         enable = true;
-  #         extraCommand = "/srv/prepare_oar_cgroup.sh init";
-  #       };
-  #     };
-  #   };
-  # };
+  services.node2 = addCommon {
+    service.hostname="node2";
+    nixos.configuration = {
+      services.oar.node = {
+        enable = true;
+        register = {
+          enable = true;
+          extraCommand = "/srv/prepare_oar_cgroup.sh init";
+        };
+      };
+    };
+  };
 }
