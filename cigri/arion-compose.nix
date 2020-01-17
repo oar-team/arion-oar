@@ -63,7 +63,21 @@ in
           host = "cigri";
           logfile = "/tmp/cigri.log";
         };        
-      };      
+      };
+      services.my-startup = {
+        enable = true;
+        path = with pkgs; [ nur.repos.kapack.cigri sudo postgresql ];
+        script = ''
+           systemctl stop cigri-server
+          #Waiting cigri database is ready
+          until sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw cigri
+          do
+            sleep 0.5
+          done
+          newcluster cluster_0  http://server/oarapi-unsecure/ none fakeuser fakepasswd "" server oar2_5 resource_id 2 ""
+          systemctl start cigri-server
+        '';
+      };
     }; 
   };
 
