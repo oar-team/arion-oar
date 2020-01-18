@@ -68,14 +68,21 @@ in
         enable = true;
         path = with pkgs; [ nur.repos.kapack.cigri sudo postgresql ];
         script = ''
-           systemctl stop cigri-server
-          #Waiting cigri database is ready
+          # Waiting cigri database is ready
+          until pg_isready -h cigri -p 5432 -U postgres
+          do
+            echo "Waiting for postgres"
+            sleep 0.5;
+          done
+
           until sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw cigri
           do
+            echo "Waiting for cigri db created"
             sleep 0.5
           done
+
           newcluster cluster_0  http://server/oarapi-unsecure/ none fakeuser fakepasswd "" server oar2_5 resource_id 2 ""
-          systemctl start cigri-server
+          systemctl restart cigri-server
         '';
       };
     }; 
