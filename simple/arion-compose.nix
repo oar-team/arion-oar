@@ -75,6 +75,7 @@ in
       services.oar.server.enable = true;
       services.oar.dbserver.enable = true;
       services.oar.web.enable = true;
+      services.oar.web.monika.enable = true;
     };
     
     service.ports = [
