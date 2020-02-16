@@ -7,7 +7,6 @@ common = {
   
   service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
   service.useHostStore = true;
-  #service.tmpfs = [ "/run" "/run/wrappers:exec,suid" "/tmp:exec,mode=777" ];
 
   nixos.useSystemd = true;
   nixos.runWrappersUnsafe = true;
@@ -80,7 +79,7 @@ in
       services.oar.web.drawgantt.enable = true;
     };
     
-    service.capabilities = { SYS_ADMIN = true; };
+    service.capabilities = { SYS_ADMIN = true; }; # for phpfpm need to drawgantt
     service.ports = [ "8000:80"]; # host:container
 
   };
