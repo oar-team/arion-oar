@@ -7,7 +7,8 @@ common = {
   
   service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
   service.useHostStore = true;
-  
+  #service.tmpfs = [ "/run" "/run/wrappers:exec,suid" "/tmp:exec,mode=777" ];
+
   nixos.useSystemd = true;
   nixos.runWrappersUnsafe = true;
   nixos.configuration = {
@@ -76,12 +77,12 @@ in
       services.oar.dbserver.enable = true;
       services.oar.web.enable = true;
       services.oar.web.monika.enable = true;
+      services.oar.web.drawgantt.enable = true;
     };
     
-    service.ports = [
-      "8000:80" # host:container
-    ];
-    
+    service.capabilities = { SYS_ADMIN = true; };
+    service.ports = [ "8000:80"]; # host:container
+
   };
 
   services.node1 = addCommon {
