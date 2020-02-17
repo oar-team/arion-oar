@@ -9,15 +9,26 @@ Arion OAR allows to setup mini OAR cluster based on docker containers and [NixOS
 ```sh
 nix-env -iA arion -f https://github.com/oar-team/arion/tarball/master
 ```
-# Basic flavor:
-Basic OAR cluster with a frontend, a server and two nodes.
 
+# Installation:
+Not a real installation just take the source:
 ```sh
 git clone git@github.com:oar-team/arion-oar.git
-cd arion-oar/basic
+cd arion-oar
+```
+# Flavors and use:
+Several flavors are proposed:
+ - **Basic**: OAR cluster with a frontend, a server and two nodes.
+ - **Simple**: OAR cluster with a frontend, a server and two nodes, with drawgantt and monika.
+ - **Full**:  OAR cluster as _simple_ one with _Colmet_ monitoring service (**WIP**).
+ - **CiGri**: Lightweight Grid with 2 OAR clusters.
+
+```sh
+# below, replace <FLAVOR> by your choice, e.g. basic
+cd <FLAVOR>
 arion up
 #In other terminal
-cd arion-oar/basic
+cd <FLAVOR> 
 arion exec frontend bash
 #Now submit an interactive job (Ctrl-D to terminate)
 oarsub -I
@@ -27,7 +38,7 @@ To stop containers
 arion down
 ```
 
-# Miscs:
+# Misc:
 ## Cgroups cleaning
 To allow cgroups support a new hierarchy (/sys/fs/cgroup/oardocker) and links are automatically created to remove them launch the follow command
 ```sh
@@ -42,4 +53,3 @@ function docka() {docker exec -it $(docker ps -qf "name=.*$1.*") bash;}
 # Use
 docka frontend
 ```
-
