@@ -4,10 +4,11 @@ import <nixpkgs> {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
       repoOverrides = {
+        #kapack = import /home/auguste/dev/nur-kapack {};
         kapack = import (pkgs.fetchgit {
           url = https://github.com/oar-team/nur-kapack;
-          rev = "2e37e608195e7674890d90d575170b121387507";
-          sha256 = "06z2g97mkh896axir4lhinqzbmb5s8gz1miamrgk5r2731mya5l3";
+          rev = "bfb4dbd537e386a28158f3e71427873f651a6bc9";
+          sha256 = "1b5m0lhij4b8bwy2mg8qdw0djn72gcq5g4wp7imb815df9lmd2h9";
         }) {};
       };
     };
