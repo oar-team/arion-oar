@@ -13,7 +13,7 @@ nix-env -iA arion -f https://github.com/oar-team/arion/tarball/master
 # Installation:
 Not a real installation just take the source:
 ```sh
-git clone git@github.com:oar-team/arion-oar.git
+git clone https://github.com/oar-team/arion-oar.git
 cd arion-oar
 ```
 # Flavors and use:
