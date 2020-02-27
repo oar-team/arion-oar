@@ -20,10 +20,6 @@ if [ "$1" = "init" ]; then
     done
     ln -s $OS_CGROUPS_PATH/cpuset/oardocker/$HOSTNAME /dev/cpuset
 
-    # To prepare venue of colmet (to remove)
-    mkdir -p $OS_CGROUPS_PATH/cpuset/oardocker/$HOSTNAME/oar
-    chmod g+w $OS_CGROUPS_PATH/cpuset/oardocker/$HOSTNAME/oar
-    
     cat $OS_CGROUPS_PATH/cpuset/cpuset.cpus > $OS_CGROUPS_PATH/cpuset/oardocker/cpuset.cpus
     cat $OS_CGROUPS_PATH/cpuset/cpuset.mems > $OS_CGROUPS_PATH/cpuset/oardocker/cpuset.mems
     /run/current-system/sw/bin/echo 0 > $OS_CGROUPS_PATH/cpuset/oardocker/cpuset.cpu_exclusive
