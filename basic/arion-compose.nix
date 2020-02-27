@@ -5,7 +5,7 @@ inherit (import ../common/ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKe
 
 common = {
   
-  service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
+  service.volumes = [ "${builtins.getEnv "PWD"}/..:/srv" ];
   service.useHostStore = true;
   
   nixos.useSystemd = true;
