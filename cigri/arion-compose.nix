@@ -1,11 +1,11 @@
 { pkgs, lib,... }:
 let
 
-  inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+  inherit (import ../common/ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
 common = {
   
-  service.volumes = [ "${builtins.getEnv "PWD"}:/srv" ];
+  service.volumes = [ "${builtins.getEnv "PWD"}/..:/srv" ];
   service.useHostStore = true;
   
   nixos.useSystemd = true;
@@ -28,7 +28,7 @@ common = {
       # oar db passwords
       database = {
         host = "server";
-        passwordFile = "/srv/oar-dbpassword";
+        passwordFile = "/srv/common/oar-dbpassword";
       };
       server.host = "server";
       privateKeyFile = "/etc/privkey.snakeoil";
@@ -55,7 +55,7 @@ in
         client.enable = true;
         database = {
           host = "cigri";
-          passwordFile = "/srv/cigri-dbpassword";
+          passwordFile = "/srv/common/cigri-dbpassword";
         };
         server = {
           enable = true;
@@ -132,7 +132,7 @@ in
         enable = true;
         register = {
           enable = true;
-          extraCommand = "/srv/prepare_oar_cgroup.sh init";
+          extraCommand = "/srv/common/prepare_oar_cgroup.sh init";
         };
       };
     };
@@ -145,7 +145,7 @@ in
         enable = true;
         register = {
           enable = true;
-          extraCommand = "/srv/prepare_oar_cgroup.sh init";
+          extraCommand = "/srv/common/prepare_oar_cgroup.sh init";
         };
       };
     };
