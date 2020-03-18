@@ -98,7 +98,7 @@ in
   services.server = addCommon {
     service.hostname="server";
     nixos.configuration = {
-      environment.etc."oarapi-users" = {
+      environment.etc."oar/api-users" = {
         mode = "0644";
         text = ''
           user1:$apr1$yWaXLHPA$CeVYWXBqpPdN78e5FvbY3/
