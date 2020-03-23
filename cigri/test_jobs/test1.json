@@ -1,7 +1,7 @@
 {
   "name": "test1",
   "resources": "resource_id=1",
-  "exec_file": "/srv/test_jobs/test1.sh",
+  "exec_file": "/srv/cigri/test_jobs/test1.sh",
   "test_mode": "false",
   "clusters": {
     "cluster_0": {
@@ -10,11 +10,12 @@
     }
   },
   "prologue": [
-    "mkdir $HOME/workdir",
+    "mkdir -p $HOME/workdir",
     "cd $HOME/workdir",
     "touch prologue_works"
   ],
   "epilogue": [
+    "mkdir -p $HOME/workdir",	  
     "cd $HOME/workdir",
     "touch epilogue_works"
   ],
