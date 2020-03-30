@@ -6,6 +6,7 @@ let
 common = {
   
   service.volumes = [ "${builtins.getEnv "PWD"}/..:/srv" ];
+  service.capabilities = { SYS_ADMIN = true; }; # for nfs
   service.useHostStore = true;
   
   nixos.useSystemd = true;
@@ -17,7 +18,7 @@ common = {
     users.users.user1 = {isNormalUser = true;};
     users.users.user2 = {isNormalUser = true;};
     
-    environment.systemPackages = with pkgs; [ socat wget ruby ];
+    environment.systemPackages = with pkgs; [ nfs-utils socat wget ruby ];
     imports = lib.attrValues pkgs.nur.repos.kapack.modules;
     
     # oar user's key files
@@ -124,6 +125,14 @@ in
       };
     };
   };
+
+  services.fileserver = addCommon {
+    service.hostname="fileserver";
+    nixos.configuration = {
+      services.nfs.server.enable = true;
+      services.nfs.server.exports = ''/srv/shared *(rw,sync,no_subtree_check,no_root_squash,insecure)'';
+    };    
+  };
   
   services.node1 = addCommon {
     service.hostname="node1";
@@ -132,7 +141,11 @@ in
         enable = true;
         register = {
           enable = true;
-          extraCommand = "/srv/common/prepare_oar_cgroup.sh init";
+          extraCommand = ''
+            /srv/common/prepare_oar_cgroup.sh init
+            mkdir -p /mnt/shared
+            /run/current-system/sw/bin/mount -t nfs fileserver:/srv/shared /mnt/shared -o nolock
+          '';
         };
       };
     };
@@ -145,7 +158,11 @@ in
         enable = true;
         register = {
           enable = true;
-          extraCommand = "/srv/common/prepare_oar_cgroup.sh init";
+          extraCommand = ''
+            /srv/common/prepare_oar_cgroup.sh init
+            mkdir -p /mnt/shared
+            /run/current-system/sw/bin/mount -t nfs fileserver:/srv/shared /mnt/shared -o nolock
+          '';
         };
       };
     };
