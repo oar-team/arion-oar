@@ -7,7 +7,7 @@ Arion OAR allows to setup mini OAR cluster based on docker containers and [NixOS
 - Machine with [Nixos](https://nixos.org/) 
 - A modified version of [Arion](https://github.com/hercules-ci/arion): [there](https://github.com/oar-team/arion)
 ```sh
-nix-env -iA arion -f https://github.com/oar-team/arion/tarball/master
+nix-env -iA arion -f https://github.com/oar-team/arion/tarball/wrappers
 ```
 
 # Installation:
